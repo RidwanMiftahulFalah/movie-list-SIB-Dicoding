@@ -56,7 +56,7 @@ header .search-form input {
 header .search-form button {
   font-size: 1rem;
   width: 100px;
-  background-color: #c99439;
+  background-color: rgb(206, 149, 6);
   color: white;
   border: none;
   border-top-right-radius: 30px;
