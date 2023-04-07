@@ -7,33 +7,25 @@ class ContentCard extends HTMLElement {
     this.render();
   }
 
-  set orchid(orchid) {
-    this._orchid = orchid;
-  }
-
-  set moreData(moreData) {
-    this._moreData = moreData;
+  set movie(movie) {
+    this._movie = movie;
   }
 
   render() {
-    const distribution = this._orchid.distribution.native || [];
-    
+    const { original_title, overview, poster_path } = this._movie;
+
     this.innerHTML = `
-      <h1>${this._orchid.scientific_name}</h1>
+      <h1>${original_title}</h1>
 
       <section class="article-body">
         <img
-          src="${this._orchid.image_url}"
-          alt="${this._orchid.scientific_name} Image"
+          src="https://image.tmdb.org/t/p/w500${poster_path}"
+          alt="${original_title}'s Poster"
           class="article-image"
         />
 
         <div class="detail-container">
-          <p><span>Common Name:</span> ${this._orchid.common_name || '-'}</p>
-          <p><span>Scientific Name:</span> ${this._orchid.scientific_name}</p>
-          <p><span>Genus:</span> ${this._orchid.genus}</p>
-          <p><span>Family:</span> ${this._orchid.family}</p>
-          <p><span>Distribution:</span> ${distribution.map(item => ` ${item}`)}</p>
+          <p><span>${overview}</span></p>
         </div>        
       </section>`;
   }

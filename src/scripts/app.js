@@ -61,10 +61,14 @@ const fetchData = async (url) => {
   try {
     const response = await fetch(url);
     const json = await response.json();
-    const data = json.results;
+    const movieList = json.results;
 
-    data.forEach(movie => {
-      
+    console.log(movieList);
+
+    movieList.forEach(movie => {
+      const contentCard = document.createElement('content-card');
+      contentCard.movie = movie;
+      contentContainer.appendChild(contentCard);
     });
 
   } catch (error) {
