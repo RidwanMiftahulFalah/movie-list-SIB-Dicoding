@@ -9,7 +9,7 @@
 body {
   position: relative;
   min-height: 100vh;
-  background-color: #99bd8f59;
+  background-color: rgb(240, 222, 188);
   display: flex;
   flex-direction: column;
   font-family: 'Poppins';
@@ -25,13 +25,13 @@ header {
   margin-inline: auto;
 
   width: 85vw;
-  background-color: #1c6758;
+  background-color: midnightblue;
   padding-block: 1rem;
   border-radius: 0 0 50px 50px;
 }
 
 header .nav-logo h1 {
-  color: #c99439;
+  color: rgb(218, 159, 12);
   font-family: 'Lobster';
   font-size: 2.5em;
   font-weight: 500;
@@ -144,10 +144,12 @@ main aside img {
 }
 
 footer {
+  position: absolute;
+  bottom: 0;
   width: 100vw;
   padding: 1em;
-  background-color: #175549;
-  color: #c99439;
+  background-color: midnightblue;
+  color: rgb(218, 159, 12);
   text-align: center;
 }
 
@@ -211,7 +213,6 @@ footer {
   }
 
   footer {
-    position: absolute;
-    bottom: 0;
+    margin: 0;
   }
 }
