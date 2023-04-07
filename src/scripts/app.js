@@ -3,77 +3,73 @@ import './components/content-card.js';
 
 const baseURL = 'https://api.themoviedb.org/3';
 const token = 'api_key=fa0e3abf788c3e22db2c06dfea234a19';
+const language = '&language=en';
 
 const searchForm = document.querySelector('.search-form');
 const contentContainer = document.querySelector('.content-container');
 
-const popularResult = `${baseURL}/movie/popular?${token}`;
+const topRatedResult = `${baseURL}/movie/top_rated?${token}${language}`;
 
-// async function fetchData(url) {
-//   try {
-//     // Fetch Header Data
-//     const response = await fetch(url, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Access-Control-Allow-Origin': '*',
-//       },
-//     });
-//     const json = await response.json();
-//     const orchidList = json.data;
+const fetchGenres = async () => {
+  try {
+    const response = await fetch(`${baseURL}/genre/movie/list?${token}`);
+    const json = await response.json();
+    const genres = json.genres;
 
-// contentContainer.innerHTML = '';
+    return genres;
+  } catch (error) {
+    alert(error);
+  }
+};
 
-// if (orchidList.length === 0) {
-//   const message = document.createElement('h2');
-//   message.style.margin = 'auto';
-//   message.innerText = 'Data not found...';
-//   contentContainer.appendChild(message);
-// }
+const getMovieGenre = (movie, genres) => {
+  let genreList = [];
 
-// orchidList.forEach((orchid) => {
-//   // Fetch Detail Data
-//   fetch(`${baseURL}${orchid.links.self}?${token}`)
-//     .then((response) => response.json())
-//     .then((json) => {
-//       const contentCard = document.createElement('content-card');
-//       contentCard._orchid = json.data;
-//       contentContainer.appendChild(contentCard);
-//     })
-//     .catch((error) => alert(error));
-// });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+  movie['genre_ids'].forEach((genreID) => {
+    const genre = genres.find((genre) => genre.id === genreID);
+    genreList.push(genre.name);
+  });
 
-// fetchData(allData);
+  return genreList;
+};
+
+const fetchMovies = async (url) => {
+  try {
+    const response = await fetch(url);
+    const json = await response.json();
+    const movieList = json.results;
+    const availableGenres = await fetchGenres().then((data) => {
+      return data;
+    });
+
+    contentContainer.innerHTML = '';
+
+    if (movieList.length === 0) {
+      contentContainer.innerHTML = '<h1 style="margin-inline: auto">Data not found!</h1>';      
+    } else {
+      movieList.forEach((movie) => {
+        renderMovies(movie, getMovieGenre(movie, availableGenres));
+      });     
+    }
+  } catch (error) {
+    alert(error);
+  }
+};
+
+const renderMovies = (movie, genreList) => {
+  const contentCard = document.createElement('content-card');
+  contentCard.movie = movie;
+  contentCard.genreList = genreList;
+  contentContainer.appendChild(contentCard);
+};
+
+fetchMovies(topRatedResult);
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const searchQuery = document.getElementById('search-input').value.trim();
-  let searchResult = `${baseURL}/api/v1/plants/search?${token}&q=${searchQuery}&filter[family]=Orchidaceae`;
+  const searchResult = `${baseURL}/search/movie?${token}${language}&query=${searchQuery}`;
 
-  // fetchData(searchQuery ? searchResult : allData);
+  fetchMovies(searchQuery ? searchResult : topRatedResult);
 });
-
-const fetchData = async (url) => {
-  try {
-    const response = await fetch(url);
-    const json = await response.json();
-    const movieList = json.results;
-
-    console.log(movieList);
-
-    movieList.forEach(movie => {
-      const contentCard = document.createElement('content-card');
-      contentCard.movie = movie;
-      contentContainer.appendChild(contentCard);
-    });
-
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-fetchData(popularResult);

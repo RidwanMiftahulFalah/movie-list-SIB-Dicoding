@@ -11,21 +11,58 @@ class ContentCard extends HTMLElement {
     this._movie = movie;
   }
 
+  set genreList(genreList) {
+    this._genreList = genreList;
+  }
+
   render() {
-    const { original_title, overview, poster_path } = this._movie;
+    const {
+      poster_path,
+      title,
+      release_date,
+      popularity,
+      vote_average,
+      vote_count,
+    } = this._movie;
 
     this.innerHTML = `
-      <h1>${original_title}</h1>
+      <h1>${title}</h1>
 
-      <section class="article-body">
+      <section class="content-body">
         <img
-          src="https://image.tmdb.org/t/p/w500${poster_path}"
-          alt="${original_title}'s Poster"
-          class="article-image"
+          src="${
+            poster_path ? 'https://image.tmdb.org/t/p/w500' + poster_path : ''
+          }"
+          alt="${title}'s Poster"
+          class="movie-image"
         />
 
-        <div class="detail-container">
-          <p><span>${overview}</span></p>
+        <div class="movie-detail">
+          <div class="movie-property">
+            <p><span>Release Date:</span></p>
+            <p>${release_date}</p>
+          </div>
+
+          <div class="movie-property">
+            <p><span>Genre:</span></p>
+            <p>${this._genreList.map((genre) => ' ' + genre)}</p>
+          </div>
+
+          <div class="movie-property">
+            <p><span>Popularity:</span></p>
+            <p>${popularity}</p>
+          </div>
+
+          <div class="movie-property">
+            <p><span>Rating:</span></p>
+            <p>${vote_average}</p>
+          </div>
+
+          <div class="movie-property">
+            <p><span>Votes:</span></p>
+            <p>${vote_count}</p>
+          </div>
+          
         </div>        
       </section>`;
   }
